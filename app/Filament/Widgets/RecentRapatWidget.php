@@ -5,32 +5,54 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Table;
 use App\Models\Rapat;
 use Filament\Tables\Columns\TextColumn;
-use Carbon\Carbon;  // Ensure Carbon is imported
+use Filament\Tables\Columns\BadgeColumn;
+use Carbon\Carbon;
 
 class RecentRapatWidget extends BaseWidget
 {
+    protected static ?string $heading = 'Rapat Terbaru';
+    protected static ?int $sort = 3;
+    protected int | string | array $columnSpan = 'full';
+
     public function table(Table $table): Table
     {
         return $table
-            ->query(Rapat::latest())  // Querying the 'Rapat' model and ordering by the most recent
+            ->query(Rapat::latest()->limit(5))
             ->columns([
                 TextColumn::make('agenda_rapat')
                     ->label('Agenda Rapat')
-                    ->sortable(),
-                
-                // Custom column to display 'hari_rapat' and 'tanggal_rapat' combined
-                TextColumn::make('combined_hari_tanggal')
-                    ->label('Hari/Tanggal Rapat')
+                    ->searchable()
                     ->sortable()
-                    ->getStateUsing(function ($record) {
-                        $tanggalRapat = Carbon::parse($record->tanggal_rapat);  // Parse string to Carbon date
-                        return $record->hari_rapat . ' / ' . $tanggalRapat->format('d-m-Y');  // Format the date
-                    }),
+                    ->wrap()
+                    ->limit(50),
+
+                TextColumn::make('tanggal_rapat')
+                    ->label('Tanggal')
+                    ->date('d M Y')
+                    ->sortable(),
+
+                TextColumn::make('waktu_mulai')
+                    ->label('Waktu')
+                    ->formatStateUsing(fn ($state) => Carbon::parse($state)->format('H:i'))
+                    ->sortable(),
 
                 TextColumn::make('lokasi_rapat')
-                    ->label('Lokasi Rapat')
+                    ->label('Lokasi')
+                    ->searchable()
                     ->sortable(),
-                // You can add more columns as needed
-            ]);
+
+                BadgeColumn::make('status')
+                    ->label('Status')
+                    ->colors([
+                        'danger' => fn ($state) => Carbon::parse($state)->isPast(),
+                        'success' => fn ($state) => Carbon::parse($state)->isFuture(),
+                        'warning' => fn ($state) => Carbon::parse($state)->isToday(),
+                    ])
+                    ->formatStateUsing(fn ($state) => Carbon::parse($state)->isPast() ? 'Selesai' : 
+                        (Carbon::parse($state)->isToday() ? 'Hari Ini' : 'Akan Datang')),
+            ])
+            ->defaultSort('tanggal_rapat', 'desc')
+            ->striped()
+            ->paginated(false);
     }
 }
