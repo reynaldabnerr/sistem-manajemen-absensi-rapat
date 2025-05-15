@@ -36,10 +36,10 @@ class ViewKehadiranRapat extends Page implements HasTable
     {
         return [
             Tables\Columns\TextColumn::make('nama'),
-            Tables\Columns\TextColumn::make('nip_nik'),
-            Tables\Columns\TextColumn::make('unit_kerja'),
-            Tables\Columns\TextColumn::make('jabatan_tugas'),
-            Tables\Columns\ImageColumn::make('tanda_tangan'),
+            Tables\Columns\TextColumn::make('nip_nik')->label('NIP/NIK'),
+            Tables\Columns\TextColumn::make('unit_kerja')->label('Unit Kerja'),
+            Tables\Columns\TextColumn::make('jabatan_tugas')->label('Jabatan/Tugas'),
+            Tables\Columns\ImageColumn::make('tanda_tangan')->label('Tanda Tangan'),
         ];
     }
 
