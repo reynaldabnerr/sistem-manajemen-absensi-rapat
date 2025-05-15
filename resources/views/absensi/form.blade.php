@@ -4,30 +4,26 @@
         <div class="max-w-4xl mx-auto transform transition-all duration-300 hover:scale-[1.005]">
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <!-- Header Section -->
-                <div class="bg-red-600 px-8 py-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div class="flex-1 min-w-0"> 
-                            <!-- Judul Rapat dengan break-words -->
-                            <h1 class="text-2xl font-bold text-white break-words whitespace-normal">
-                                {{ $rapat->agenda_rapat }}
-                            </h1>
+                <div style="background-color: #002147;" class="px-8 py-6">
+                    <div class="space-y-3">
+                        <h1 class="text-2xl font-bold text-white">
+                            {{ $rapat->agenda_rapat }}
+                        </h1>
 
-                        {{-- Tanggal Rapat --}}
-                        <p class="text-white mt-1 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
+                        <div class="flex items-center text-sm text-white">
+                            <x-heroicon-o-calendar class="h-5 w-5 mr-2" />
                             {{ \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
-                        </p>
+                        </div>
 
-                        {{-- Lokasi Rapat --}}
-                        <p class="text-white mt-1 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.656 0 3-1.343 3-3s-1.344-3-3-3-3 1.343-3 3 1.344 3 3 4z"/>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 22s8-4.5 8-11a8 8 0 10-16 0c0 6.5 8 11 8 11z"/>
-                            </svg>
+                        <div class="flex items-center text-sm text-white">
+                            <x-heroicon-o-map-pin class="h-5 w-5 mr-2" />
                             {{ $rapat->lokasi_rapat }}
-                        </p>
+                        </div>
+
+                        <div class="flex items-center text-sm text-white">
+                            <x-heroicon-o-clock class="h-5 w-5 mr-2" />
+                            {{ \Carbon\Carbon::parse($rapat->waktu_mulai)->format('H:i') }} -
+                            {{ $rapat->waktu_selesai ? \Carbon\Carbon::parse($rapat->waktu_selesai)->format('H:i') : 'selesai' }} WITA
                         </div>
                     </div>
                 </div>
@@ -204,6 +200,21 @@
                 signaturePad.clear();
                         }
                     });
+
+            document.getElementById('nip_nik').addEventListener('change', function () {
+                const nip = this.value;
+                const uuid = "{{ $rapat->link_absensi }}";
+
+                fetch(`/absensi/${uuid}/cek-nip?nip_nik=${nip}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data) {
+                            document.getElementById('nama').value = data.nama || '';
+                            document.getElementById('unit_kerja').value = data.unit_kerja || '';
+                            document.getElementById('jabatan_tugas').value = data.jabatan_tugas || '';
+                        }
+                    });
+            });
     </script>
     @endpush
 @endsection
