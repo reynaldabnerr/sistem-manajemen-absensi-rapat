@@ -5,7 +5,6 @@ use Filament\Widgets\TableWidget as BaseWidget;
 use Filament\Tables\Table;
 use App\Models\Rapat;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Columns\BadgeColumn;
 use Carbon\Carbon;
 
 class RecentRapatWidget extends BaseWidget
@@ -40,16 +39,6 @@ class RecentRapatWidget extends BaseWidget
                     ->label('Lokasi')
                     ->searchable()
                     ->sortable(),
-
-                BadgeColumn::make('status')
-                    ->label('Status')
-                    ->colors([
-                        'danger' => fn ($state) => Carbon::parse($state)->isPast(),
-                        'success' => fn ($state) => Carbon::parse($state)->isFuture(),
-                        'warning' => fn ($state) => Carbon::parse($state)->isToday(),
-                    ])
-                    ->formatStateUsing(fn ($state) => Carbon::parse($state)->isPast() ? 'Selesai' : 
-                        (Carbon::parse($state)->isToday() ? 'Hari Ini' : 'Akan Datang')),
             ])
             ->defaultSort('tanggal_rapat', 'desc')
             ->striped()
