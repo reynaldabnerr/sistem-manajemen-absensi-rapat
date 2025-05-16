@@ -2,35 +2,59 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use Filament\Charts\Chart;  // Ensure Chart is imported
 use App\Models\Rapat;
+use Carbon\Carbon;
 
 class TotalRapatWidget extends ChartWidget
 {
-    protected static ?string $heading = 'Total Rapat';
+    protected static ?string $heading = 'Statistik Rapat';
+    protected static ?int $sort = 1;
+    protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array
     {
-        // Get total count of rapat
-        $totalRapat = \App\Models\Rapat::count();
+        $data = collect(range(6, 0))->map(function ($days) {
+            return [
+                'date' => Carbon::now()->subDays($days)->format('d M'),
+                'total' => Rapat::whereDate('tanggal_rapat', Carbon::now()->subDays($days))->count(),
+            ];
+        });
 
-        // Here we're creating the chart data in a format that Filament expects
         return [
-            'labels' => ['Total Rapat'],  // The label for the bar chart
             'datasets' => [
                 [
-                    'label' => 'Jumlah Rapat',  // Name of the dataset (this is the label that appears on the chart)
-                    'data' => [$totalRapat],  // Data to display in the chart
-                    'backgroundColor' => '#4caf50',  // Background color for the bar
-                    'borderColor' => '#388e3c',  // Border color for the bar
-                    'borderWidth' => 1,  // Border width of the bar
+                    'label' => 'Jumlah Rapat',
+                    'data' => $data->pluck('total')->toArray(),
+                    'borderColor' => '#10B981',
+                    'backgroundColor' => '#10B981',
+                    'tension' => 0.3,
                 ],
             ],
+            'labels' => $data->pluck('date')->toArray(),
         ];
     }
 
     protected function getType(): string
     {
-        return 'bar';  // Specifying that the chart type is 'bar'
+        return 'line';
+    }
+
+    protected function getOptions(): array
+    {
+        return [
+            'plugins' => [
+                'legend' => [
+                    'display' => false,
+                ],
+            ],
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 1,
+                    ],
+                ],
+            ],
+        ];
     }
 }

@@ -13,7 +13,10 @@ class ListRapats extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Tambah Rapat') // Ubah label sesuai keinginan
+                ->modalHeading('Form Tambah Rapat')
+                ->modalSubmitActionLabel('Simpan Rapat')
         ];
     }
 }

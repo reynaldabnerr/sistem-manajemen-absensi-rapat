@@ -18,6 +18,8 @@ class Rapat extends Model
         'tanggal_rapat',
         'lokasi_rapat',
         'link_absensi',
+        'waktu_mulai',
+        'waktu_selesai',
     ];
 
     // Relasi ke KehadiranRapat
@@ -32,6 +34,18 @@ class Rapat extends Model
 
         static::creating(function ($rapat) {
             $rapat->link_absensi = Str::uuid();
+        });
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($rapat) {
+            $rapat->link_absensi = Str::uuid();
+            $rapat->hari_rapat = \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->translatedFormat('l');
+        });
+
+        static::updating(function ($rapat) {
+            $rapat->hari_rapat = \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->translatedFormat('l');
         });
     }
 }
