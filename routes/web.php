@@ -27,15 +27,5 @@ Route::get('/admin/rapats/{rapat}/kehadiran/export', function (Rapat $rapat) {
 
     $pdf->setPaper('A4', 'portrait');
 
-    // ✅ Tempatkan teks tepat di lokasi kolom metadata "Halaman"
-    $domPdf = $pdf->getDomPDF();
-    $canvas = $domPdf->get_canvas();
-
-    $canvas->page_script(function ($pageNumber, $pageCount, $canvas, $fontMetrics) {
-        $text = "Halaman {$pageNumber} dari {$pageCount}";
-        $font = $fontMetrics->getFont('Times New Roman', 'normal');
-        $canvas->text(465, 95, $text, $font, 7); // ⬅️ sesuaikan posisi di dalam cell
-    });
-
     return $pdf->download('kehadiran-rapat-' . $rapat->id . '.pdf');
 })->name('rapats.kehadiran.export');
