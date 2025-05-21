@@ -79,14 +79,9 @@ class ViewKehadiranRapat extends Page implements HasTable
                 TextInput::make('nip_nik')->label('NIP/NIK')->required(),
                 TextInput::make('unit_kerja')->required(),
                 TextInput::make('jabatan_tugas')->required(),
-                FileUpload::make('tanda_tangan')
-                    ->label('Tanda Tangan')
-                    ->image()
-                    ->directory('tanda-tangan')
-                    ->imagePreviewHeight('150')
-                    ->required(),
+                TextInput::make('tanda_tangan'),
             ]),
-            Tables\Actions\DeleteAction::make(),
+        Tables\Actions\DeleteAction::make(),
         ];
     }
 }
