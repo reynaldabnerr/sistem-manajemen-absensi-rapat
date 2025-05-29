@@ -104,6 +104,7 @@ class RapatResource extends Resource
     {
         return [
             'index' => Pages\ListRapats::route('/'),
+            'history' => Pages\HistoryRapat::route('/history'),
             'viewKehadiran' => ViewKehadiranRapat::route('/{record}/kehadiran'),
         ];
     }
