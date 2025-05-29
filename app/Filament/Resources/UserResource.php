@@ -12,6 +12,7 @@ use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Navigation\NavigationItem;
 use App\Filament\Resources\UserResource\Pages;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -90,6 +91,6 @@ class UserResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->check() && auth()->user()->role === 'superadmin';
+        return Auth::check() && Auth::user() && Auth::user()->role === 'superadmin';
     }
 }
