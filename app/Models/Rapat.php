@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class Rapat extends Model
 {
@@ -22,35 +24,41 @@ class Rapat extends Model
         'waktu_selesai',
         'jenis_rapat',    
         'link_meeting',
-        'penandatangan_jabatan',
-        'penandatangan_nama',
-        'penandatangan_nip',
     ];
 
-    // Relasi ke KehadiranRapat
     public function kehadirans()
     {
-        return $this->hasMany(KehadiranRapat::class, 'rapat_id'); // Relasi ke tabel kehadiran_rapat
+        return $this->hasMany(KehadiranRapat::class, 'rapat_id');
     }
 
-    protected static function boot()
+    public function unitKerja()
     {
-        parent::boot();
+        return $this->belongsTo(UnitKerja::class);
+    }
 
-        static::creating(function ($rapat) {
-            $rapat->link_absensi = Str::uuid();
-        });
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     protected static function booted(): void
     {
         static::creating(function ($rapat) {
             $rapat->link_absensi = Str::uuid();
-            $rapat->hari_rapat = \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->translatedFormat('l');
+
+            if ($rapat->tanggal_rapat) {
+                $rapat->hari_rapat = Carbon::parse($rapat->tanggal_rapat)
+                    ->locale('id')
+                    ->translatedFormat('l');
+            }
         });
 
         static::updating(function ($rapat) {
-            $rapat->hari_rapat = \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->translatedFormat('l');
+            if ($rapat->tanggal_rapat) {
+                $rapat->hari_rapat = Carbon::parse($rapat->tanggal_rapat)
+                    ->locale('id')
+                    ->translatedFormat('l');
+            }
         });
     }
 }

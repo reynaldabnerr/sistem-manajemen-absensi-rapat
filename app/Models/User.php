@@ -6,6 +6,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\UnitKerja;
+use App\Models\Rapat;
 
 class User extends Authenticatable
 {
@@ -22,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'unit_kerja_id', // tambahkan ini
     ];
 
     /**
@@ -45,5 +48,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi ke unit kerja
+     */
+    public function unitKerja()
+    {
+        return $this->belongsTo(UnitKerja::class);
+    }
+
+    /**
+     * Relasi ke rapat yang dibuat user ini
+     */
+    public function rapats()
+    {
+        return $this->hasMany(Rapat::class);
     }
 }
