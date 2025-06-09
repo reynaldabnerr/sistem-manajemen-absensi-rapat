@@ -27,5 +27,5 @@ Route::get('/admin/rapats/{rapat}/kehadiran/export', function (Rapat $rapat) {
 
     $pdf->setPaper('A4', 'portrait');
 
-    return $pdf->download('kehadiran-rapat-' . $rapat->id . '.pdf');
+    return $pdf->stream('kehadiran-rapat-' . $rapat->id . '.pdf');
 })->name('rapats.kehadiran.export');
