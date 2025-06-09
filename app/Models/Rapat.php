@@ -22,6 +22,9 @@ class Rapat extends Model
         'waktu_selesai',
         'jenis_rapat',    
         'link_meeting',
+        'penandatangan_jabatan',
+        'penandatangan_nama',
+        'penandatangan_nip',
     ];
 
     // Relasi ke KehadiranRapat
