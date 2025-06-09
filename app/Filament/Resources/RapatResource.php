@@ -18,10 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\RapatResource\Pages\ViewKehadiranRapat;
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\URL;
-use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use Filament\Tables\Columns\ImageColumn;
+
 
 class RapatResource extends Resource
 {
