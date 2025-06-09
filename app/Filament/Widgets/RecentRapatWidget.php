@@ -16,7 +16,7 @@ class RecentRapatWidget extends BaseWidget
     public function table(Table $table): Table
     {
         return $table
-            ->query(Rapat::latest()->limit(5))
+            ->query(Rapat::query()->latest()->limit(5))
             ->columns([
                 TextColumn::make('agenda_rapat')
                     ->label('Agenda Rapat')
