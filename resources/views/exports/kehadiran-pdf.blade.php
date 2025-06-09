@@ -156,10 +156,10 @@
     <tr>
         <td style="width: 60%;"></td>
         <td style="width: 30%; text-align: left; font-size: 12px;">
-            <div>Direktur Sistem Informasi dan Tranformasi Digital</div>
+            <div>{{ $rapat->penandatangan_jabatan ?? '-' }}</div>
             <br><br><br><br>
-            <div><strong>{{ $penandatangan_nama ?? 'Dr.Eng Ady Wahyudi Paundu, ST.,MT.' }}</strong></div>
-            <div>NIP {{ $penandatangan_nip ?? '197503132009121003' }}</div>
+            <div><strong>{{ $rapat->penandatangan_nama ?? '-' }}</strong></div>
+            <div>NIP {{ $rapat->penandatangan_nip ?? '-' }}</div>
         </td>
     </tr>
 </table>
