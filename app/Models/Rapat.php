@@ -20,6 +20,8 @@ class Rapat extends Model
         'link_absensi',
         'waktu_mulai',
         'waktu_selesai',
+        'jenis_rapat',    
+        'link_meeting',
     ];
 
     // Relasi ke KehadiranRapat
