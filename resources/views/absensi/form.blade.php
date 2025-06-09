@@ -14,10 +14,28 @@
                             <x-heroicon-o-calendar class="h-5 w-5 mr-2" />
                             {{ \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}
                         </div>
-
-                        <div class="flex items-center text-sm text-white">
-                            <x-heroicon-o-map-pin class="h-5 w-5 mr-2" />
-                            {{ $rapat->lokasi_rapat }}
+                        
+                        <div class="text-sm text-white space-y-3">
+                            @if ($rapat->jenis_rapat === 'online')
+                                <div class="flex items-center">
+                                    <x-heroicon-o-link class="h-5 w-5 mr-2" />
+                                    <a href="{{ $rapat->link_meeting }}" class="underline text-blue-200" target="_blank">Link Meeting</a>
+                                </div>
+                            @elseif ($rapat->jenis_rapat === 'offline')
+                                <div class="flex items-center">
+                                    <x-heroicon-o-map-pin class="h-5 w-5 mr-2" />
+                                    {{ $rapat->lokasi_rapat }}
+                                </div>
+                            @elseif ($rapat->jenis_rapat === 'hybrid')
+                                <div class="flex items-center">
+                                    <x-heroicon-o-map-pin class="h-5 w-5 mr-2" />
+                                    {{ $rapat->lokasi_rapat }}
+                                </div>
+                                <div class="flex items-center">
+                                    <x-heroicon-o-link class="h-5 w-5 mr-2" />
+                                    <a href="{{ $rapat->link_meeting }}" class="underline text-blue-200" target="_blank">Link Meeting</a>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="flex items-center text-sm text-white">
