@@ -52,7 +52,7 @@ class ViewKehadiranRapat extends Page implements HasTable
                 ->url(route('rapats.kehadiran.export', $this->record))
                 ->openUrlInNewTab(),
             Tables\Actions\CreateAction::make()
-                ->label('Tambah Peserta Rapat')
+                ->label('+ Peserta Rapat')
                 ->form([
                     TextInput::make('nama')->required(),
                     TextInput::make('nip_nik')->label('NIP/NIK')->required(),
