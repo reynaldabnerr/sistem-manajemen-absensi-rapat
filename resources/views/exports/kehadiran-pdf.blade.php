@@ -5,8 +5,8 @@
     <title>Daftar Hadir</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            font-size: 11px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 12px;
         }
         table {
             border-collapse: collapse;
@@ -76,7 +76,7 @@
     <tr>
         <td class="logo">
             <img src="{{ public_path('logo/unhas.png') }}" alt="Logo" width="75"><br>
-            <div style="font-size: 10px;"><br><strong>UNIVERSITAS HASANUDDIN</strong></br></div>
+            <div style="font-size: 10px;"><br>UNIVERSITAS<br>HASANUDDIN</strong></div>
         </td>
         <td class="title">
             DAFTAR HADIR
@@ -110,7 +110,14 @@
     </tr>
     <tr>
         <td style="width: 50%;"><strong>HARI/TANGGAL:</strong> {{ \Carbon\Carbon::parse($rapat->tanggal_rapat)->locale('id')->isoFormat('dddd, D MMMM Y') }}</td>
-        <td style="width: 50%;"><strong>Tempat:</strong> {{ $rapat->lokasi_rapat }}</td>
+        <td style="width: 50%;">
+            <strong>Tempat:</strong>
+            @if ($rapat->jenis_rapat === 'online')
+                Online Meeting (Zoom/Microsoft Teams/Google Meet)
+            @else
+                {{ $rapat->lokasi_rapat }}
+            @endif
+        </td>
     </tr>
 </table>
 
@@ -144,6 +151,19 @@
         @endforeach
     </tbody>
 </table>
+
+<table style="width: 100%; margin-top: 30px;">
+    <tr>
+        <td style="width: 60%;"></td>
+        <td style="width: 30%; text-align: left; font-size: 12px;">
+            <div>Direktur Sistem Informasi dan Tranformasi Digital</div>
+            <br><br><br><br>
+            <div><strong>{{ $penandatangan_nama ?? 'Dr.Eng Ady Wahyudi Paundu, ST.,MT.' }}</strong></div>
+            <div>NIP {{ $penandatangan_nip ?? '197503132009121003' }}</div>
+        </td>
+    </tr>
+</table>
+
 
 </body>
 </html>
