@@ -24,6 +24,7 @@ class Rapat extends Model
         'waktu_selesai',
         'jenis_rapat',    
         'link_meeting',
+        'user_id',         // Add this
     ];
 
     public function kehadirans()

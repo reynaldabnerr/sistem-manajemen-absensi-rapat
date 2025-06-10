@@ -34,6 +34,9 @@ class RapatResource extends Resource
     {
         return $form
             ->schema([
+                Hidden::make('user_id')
+                    ->default(fn() => auth()->id()),
+
                 TextInput::make('noDokumen_rapat')->label('No. Dokumen Rapat')->required(),
                 TextInput::make('noRevisi_rapat')->label('No. Revisi Rapat')->nullable(),
                 DatePicker::make('tgl_berlaku_rapat')->label('Tanggal Berlaku')->required(),
@@ -160,10 +163,10 @@ class RapatResource extends Resource
         }
         
         // Admin can only see rapats they created
+        // Add this in the getEloquentQuery method
+        \Log::info('Filtering rapats for user: ' . $user->id);
+
         return $query->where('user_id', $user->id);
-        
-        // If using unit_kerja based filtering:
-        // return $query->where('unit_kerja_id', $user->unit_kerja_id);
     }
 
     /**
@@ -184,6 +187,9 @@ class RapatResource extends Resource
 
         $data['user_id'] = auth()->id();
         
+        // Add this debugging code in the mutateFormDataBeforeCreate method
+        \Log::info('Creating rapat for user: ' . auth()->id(), $data);
+
         return $data;
     }
 

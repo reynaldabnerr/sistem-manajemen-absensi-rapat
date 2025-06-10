@@ -10,16 +10,11 @@ class CreateRapat extends CreateRecord
 {
     protected static string $resource = RapatResource::class;
     
-    // Add this method to ensure user_id is set
+    // This is the critical part - make sure this method exists
     protected function mutateFormDataBeforeCreate(array $data): array
     {
-        // Set the user_id to the current authenticated user
+        // Force set the user_id to the current user
         $data['user_id'] = auth()->id();
-        
-        // Set unit_kerja_id if not already set
-        if (!isset($data['unit_kerja_id'])) {
-            $data['unit_kerja_id'] = auth()->user()->unit_kerja_id;
-        }
         
         return $data;
     }
