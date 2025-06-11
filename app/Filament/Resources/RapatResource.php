@@ -181,7 +181,7 @@ class RapatResource extends Resource
                 $data['unit_kerja_id'] = auth()->user()->unit_kerja_id;
             } else {
                 // For superadmin, use the first unit_kerja if not specified
-                $data['unit_kerja_id'] = $data['unit_kerja_id'] ?? \App\Models\UnitKerja::first()?->id;
+                $data['unit_kerja_id'] = $data['unit_kerja_id'] ?? UnitKerja::first()?->id;
             }
         }
 
@@ -202,7 +202,7 @@ class RapatResource extends Resource
                 $data['unit_kerja_id'] = auth()->user()->unit_kerja_id;
             } else {
                 // For superadmin, use the first unit_kerja if not specified
-                $data['unit_kerja_id'] = $data['unit_kerja_id'] ?? \App\Models\UnitKerja::first()?->id;
+                $data['unit_kerja_id'] = $data['unit_kerja_id'] ?? UnitKerja::first()?->id;
             }
         }
 
