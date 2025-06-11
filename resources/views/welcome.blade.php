@@ -1,109 +1,339 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sistem Manajemen Absensi Rapat</title>
+    <title>Portal Absensi Rapat - Universitas Hasanuddin</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         body {
             font-family: 'Poppins', sans-serif;
+            background-color: #f8fafc;
         }
-        .animate-fade-in {
-            animation: fadeIn 1s ease-in;
+
+        .hero-pattern {
+            background-color: #4f46e5;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath fill-rule='evenodd' d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/svg%3E");
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+
+        .meeting-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-        .countdown {
-            display: inline-block;
-            min-width: 2.5rem;
+
+        .meeting-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
         }
-        .countdown.animate {
-            animation: countdownPulse 1s ease-in-out;
+
+        .status-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            border-radius: 9999px;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
-        @keyframes countdownPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+
+        .status-upcoming {
+            background-color: #eef2ff;
+            color: #4f46e5;
+        }
+
+        .status-ongoing {
+            background-color: #ecfdf5;
+            color: #10b981;
+        }
+
+        .pulse {
+            position: relative;
+        }
+
+        .pulse::before {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #10b981;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: translateY(-50%) scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            }
+
+            70% {
+                transform: translateY(-50%) scale(1);
+                box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+            }
+
+            100% {
+                transform: translateY(-50%) scale(0.95);
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
+        .btn-primary {
+            background-color: #4f46e5;
+            color: white;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #4338ca;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #e5e7eb;
+            color: #374151;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: #d1d5db;
+            transform: translateY(-1px);
         }
     </style>
 </head>
-<body class="antialiased bg-white">
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="max-w-4xl mx-auto px-4 py-16 text-center animate-fade-in">
-            <div class="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-                    Sistem Manajemen Absensi Rapat
-                </h1>
-                <p class="text-xl text-gray-600 mb-8">
-                    Mengelola dan memantau kehadiran rapat dengan mudah dan efisien
-                </p>
-                <div class="flex justify-center space-x-4">
-                    <a href="/admin" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition duration-150 ease-in-out">
-                        Masuk ke Dashboard
+
+<body>
+    <!-- Header with University Logo -->
+    <header class="bg-white shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-3">
+                <img src="{{ asset('logo/unhas.png') }}" alt="Logo Unhas" class="h-10">
+                <div>
+                    <h1 class="font-semibold text-gray-900">Universitas Hasanuddin</h1>
+                    <p class="text-sm text-gray-600">Portal Absensi Rapat</p>
+                </div>
+            </div>
+            <a href="/admin" class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">Login Admin</a>
+        </div>
+    </header>
+
+    <!-- Hero Section with Today's Date -->
+    <section class="hero-pattern py-12 mb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold text-white mb-2">Jadwal Rapat Hari Ini</h2>
+            <p class="text-indigo-200 text-lg">{{ \Carbon\Carbon::today()->locale('id')->translatedFormat('l, d F Y') }}
+            </p>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        @if(isset($todayRapats) && $todayRapats->count() > 0)
+            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                @foreach($todayRapats as $rapat)
+                    @php
+                        $now = \Carbon\Carbon::now();
+                        $startTime = \Carbon\Carbon::parse($rapat->tanggal_rapat . ' ' . $rapat->waktu_mulai);
+                        $endTime = $rapat->waktu_selesai ?
+                            \Carbon\Carbon::parse($rapat->tanggal_rapat . ' ' . $rapat->waktu_selesai) :
+                            $startTime->copy()->addHours(2);
+                        $isOngoing = $now->between($startTime, $endTime);
+                        $isUpcoming = $now->lessThan($startTime);
+                    @endphp
+
+                    <div class="meeting-card relative bg-white rounded-xl shadow-sm overflow-hidden">
+                        @if($isOngoing)
+                            <span class="status-badge status-ongoing pulse">Sedang Berlangsung</span>
+                        @elseif($isUpcoming)
+                            <span class="status-badge status-upcoming">Akan Datang</span>
+                        @endif
+
+                        <div class="p-6">
+                            <div class="flex items-center mb-4">
+                                @if($rapat->jenis_rapat == 'online')
+                                    <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                @elseif($rapat->jenis_rapat == 'hybrid')
+                                    <div class="bg-purple-100 p-2 rounded-lg mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z" />
+                                        </svg>
+                                    </div>
+                                @else
+                                    <div class="bg-amber-100 p-2 rounded-lg mr-4">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-amber-600" fill="none"
+                                            viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                        </svg>
+                                    </div>
+                                @endif
+                                <div>
+                                    <p class="text-gray-500 text-sm">
+                                        {{ \Carbon\Carbon::parse($rapat->waktu_mulai)->format('H:i') }}</p>
+                                    <h3 class="font-semibold text-xl text-gray-800">{{ $rapat->agenda_rapat }}</h3>
+                                </div>
+                            </div>
+
+                            <div class="mb-6 space-y-3 text-gray-600">
+                                <div class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-sm">Lokasi</p>
+                                        @if($rapat->jenis_rapat == 'online')
+                                            <p>Meeting Online</p>
+                                        @elseif($rapat->jenis_rapat == 'hybrid')
+                                            <p>{{ $rapat->lokasi_rapat }} & Online</p>
+                                        @else
+                                            <p>{{ $rapat->lokasi_rapat }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                @if($rapat->jenis_rapat == 'online' || $rapat->jenis_rapat == 'hybrid')
+                                    <div class="flex items-start">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
+                                        </svg>
+                                        <div>
+                                            <p class="font-medium text-sm">Link Meeting</p>
+                                            @if(isset($rapat->link_meeting))
+                                                <a href="{{ $rapat->link_meeting }}" target="_blank"
+                                                    class="text-indigo-600 hover:text-indigo-800 underline truncate block max-w-xs">
+                                                    Buka Link Meeting
+                                                </a>
+                                            @else
+                                                <p class="text-gray-500">Link belum tersedia</p>
+                                            @endif
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="flex items-start">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 mr-2 mt-0.5"
+                                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <div>
+                                        <p class="font-medium text-sm">Waktu</p>
+                                        <p>{{ \Carbon\Carbon::parse($rapat->waktu_mulai)->format('H:i') }} -
+                                            {{ $rapat->waktu_selesai ? \Carbon\Carbon::parse($rapat->waktu_selesai)->format('H:i') : 'Selesai' }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 p-4 flex items-center justify-between border-t border-gray-100">
+                            <div>
+                                <p class="text-sm text-gray-500">No. Dokumen: <span
+                                        class="font-medium text-gray-700">{{ $rapat->noDokumen_rapat }}</span></p>
+                            </div>
+                            <a href="{{ url('/absensi/' . $rapat->link_absensi) }}"
+                                class="btn-primary text-white px-5 py-2 rounded-lg font-medium text-sm flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1.5" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Absen
+                            </a>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Quick Guide -->
+            <div class="mt-12 bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-indigo-600" fill="none"
+                        viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    Cara Mengisi Absensi
+                </h3>
+                <ol class="list-decimal ml-5 space-y-2 text-gray-600">
+                    <li>Klik tombol "Absen" pada rapat yang ingin Anda hadiri</li>
+                    <li>Isi formulir dengan data diri Anda (nama, NIP/NIK, unit kerja, dll.)</li>
+                    <li>Tanda tangani secara elektronik di tempat yang disediakan</li>
+                    <li>Klik tombol "Submit" untuk menyelesaikan proses absensi</li>
+                </ol>
+            </div>
+        @else
+            <!-- No Meetings State -->
+            <div class="text-center py-16 px-4 bg-white rounded-xl shadow-sm">
+                <img src="{{ asset('images/no-meetings.svg') }}" alt="Tidak Ada Rapat" class="w-48 mx-auto mb-6"
+                    onerror="this.src='https://cdn.pixabay.com/photo/2017/03/29/04/09/check-icon-2184719_1280.png';this.onerror='';">
+                <h3 class="text-2xl font-semibold text-gray-800 mb-2">Tidak Ada Rapat Hari Ini</h3>
+                <p class="text-gray-600 max-w-md mx-auto mb-8">Tidak ada jadwal rapat untuk hari ini. Silakan periksa
+                    kembali nanti atau hubungi administrator untuk informasi lebih lanjut.</p>
+
+                <div class="inline-flex rounded-md shadow">
+                    <a href="/" class="btn-secondary px-5 py-3 rounded-lg font-medium">
+                        Refresh Halaman
                     </a>
                 </div>
-                <p class="mt-6 text-sm text-gray-500">
-                    Mengalihkan ke dashboard dalam <span id="countdown" class="countdown font-semibold text-indigo-600">3</span> detik...
-                </p>
             </div>
-            
-            <div class="mt-12">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
-                        <svg class="w-12 h-12 mx-auto mb-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+
+            <!-- Future Meetings Teaser (optional) -->
+            <div class="mt-12 p-6 bg-indigo-50 rounded-xl border border-indigo-100">
+                <div class="flex items-start">
+                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-indigo-600" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                         </svg>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Manajemen Waktu</h3>
-                        <p class="text-sm text-gray-600">Kelola jadwal rapat dengan efisien</p>
                     </div>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
-                        <svg class="w-12 h-12 mx-auto mb-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Absensi Digital</h3>
-                        <p class="text-sm text-gray-600">Catat kehadiran secara digital</p>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Jadwal Rapat Mendatang</h3>
+                        <p class="text-gray-600">Untuk melihat jadwal rapat mendatang, silakan hubungi administrator atau
+                            cek kembali portal ini di lain waktu.</p>
                     </div>
-                    
-                    <div class="bg-gray-50 rounded-xl p-6 shadow-sm">
-                        <svg class="w-12 h-12 mx-auto mb-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-                        </svg>
-                        <h3 class="text-xl font-semibold mb-2 text-gray-800">Laporan Real-time</h3>
-                        <p class="text-sm text-gray-600">Pantau statistik kehadiran secara real-time</p>
+                </div>
+            </div>
+        @endif
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="md:flex md:items-center md:justify-between">
+                <div class="flex items-center">
+                    <img src="{{ asset('logo/unhas.png') }}" alt="Logo Unhas" class="h-10 mr-3">
+                    <div class="text-gray-400">
+                        <p class="text-sm">&copy; {{ date('Y') }} Universitas Hasanuddin</p>
+                        <p class="text-xs">Sistem Manajemen Absensi Rapat</p>
                     </div>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <p class="text-sm text-gray-400">Ada pertanyaan? Hubungi <a href="mailto:support@unhas.ac.id"
+                            class="text-indigo-400 hover:text-indigo-300">support@unhas.ac.id</a></p>
                 </div>
             </div>
         </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            let timeLeft = 3;
-            const countdownElement = document.getElementById('countdown');
-            
-            function updateCountdown() {
-                if (timeLeft > 0) {
-                    countdownElement.textContent = timeLeft;
-                    countdownElement.classList.add('animate');
-                    setTimeout(() => countdownElement.classList.remove('animate'), 1000);
-                    timeLeft--;
-                    setTimeout(updateCountdown, 1000);
-                }
-            }
-
-            // Start countdown
-            updateCountdown();
-
-            // Redirect after 3 seconds
-            setTimeout(function() {
-                window.location.href = '/admin';
-            }, 3000);
-        });
-    </script>
+    </footer>
 </body>
+
 </html>

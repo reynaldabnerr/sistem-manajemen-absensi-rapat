@@ -3,9 +3,15 @@
 use Illuminate\Support\Facades\Route;
 use App\Models\Rapat;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 Route::get('/', function () {
-    return view('welcome');
+    $today = Carbon::today();
+    $todayRapats = Rapat::whereDate('tanggal_rapat', $today)
+        ->orderBy('waktu_mulai', 'asc')
+        ->get();
+        
+    return view('welcome', compact('todayRapats'));
 });
 
 use App\Http\Controllers\AbsensiController;
