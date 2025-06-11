@@ -2,6 +2,7 @@
 namespace App\Filament\Resources\UserResource\Pages;
 
 use App\Models\User;
+use Filament\Forms\Components\TextInput;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Hash;
 
