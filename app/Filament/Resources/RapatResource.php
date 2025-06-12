@@ -165,21 +165,27 @@ class RapatResource extends Resource
     }
 
     /**
-     * Batasi query agar hanya superadmin bisa lihat semua, dan filter rapat yang belum lewat.
+     * Batasi query agar hanya menampilkan rapat yang belum lewat untuk semua user,
+     * dan filter berdasarkan user_id untuk non-superadmin.
      */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         $query = parent::getEloquentQuery();
-        
         $user = auth()->user();
+        $today = now();
         
-        // Filter by user - regular admin only sees their own meetings
+        // Filter meetings to only show current and future ones for all users
+        $query->where(function ($q) use ($today) {
+            $q->whereDate('tanggal_rapat', '>', $today->toDateString()) // Future dates
+              ->orWhere(function ($q2) use ($today) {
+                  $q2->whereDate('tanggal_rapat', '=', $today->toDateString()); // Today
+              });
+        });
+        
+        // Additionally, filter by user_id for non-superadmins
         if ($user->role !== 'superadmin') {
             $query->where('user_id', $user->id);
         }
-
-        // We're removing the date filter entirely - let admins see ALL their meetings
-        // If you want to add date filtering later, add it to the table filters instead
         
         return $query;
     }
