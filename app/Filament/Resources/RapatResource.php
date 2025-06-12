@@ -173,26 +173,14 @@ class RapatResource extends Resource
         
         $user = auth()->user();
         
-        // Superadmin can see all rapats
-        if ($user->role === 'superadmin') {
-            // No user-specific filtering for superadmin
-        } else {
-            // Admin can only see rapats they created
-            \Log::info('Filtering rapats for user: ' . $user->id);
+        // Filter by user - regular admin only sees their own meetings
+        if ($user->role !== 'superadmin') {
             $query->where('user_id', $user->id);
         }
 
-        // Add filter for future/present meetings
-        $now = now(); // Current date and time in Carbon instance
-
-        $query->where(function (\Illuminate\Database\Eloquent\Builder $q) use ($now) {
-            $q->whereDate('tanggal_rapat', '>', $now->toDateString()) // Rapat di tanggal yang akan datang
-              ->orWhere(function (\Illuminate\Database\Eloquent\Builder $q2) use ($now) {
-                  $q2->whereDate('tanggal_rapat', $now->toDateString()) // Rapat di hari ini
-                     ->whereTime('waktu_mulai', '>=', $now->toTimeString()); // Dan waktu mulai belum lewat
-              });
-        });
-
+        // We're removing the date filter entirely - let admins see ALL their meetings
+        // If you want to add date filtering later, add it to the table filters instead
+        
         return $query;
     }
 
