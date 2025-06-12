@@ -18,6 +18,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\RapatResource\Pages\ViewKehadiranRapat;
+use Filament\Forms\Components\Section;
 
 class RapatResource extends Resource
 {
@@ -36,35 +37,51 @@ class RapatResource extends Resource
                 Hidden::make('user_id')
                     ->default(fn() => auth()->id()),
 
-                TextInput::make('noDokumen_rapat')->label('No. Dokumen Rapat')->required(),
-                TextInput::make('noRevisi_rapat')->label('No. Revisi Rapat')->nullable(),
-                DatePicker::make('tgl_berlaku_rapat')->label('Tanggal Berlaku')->required(),
-                TextInput::make('agenda_rapat')->label('Agenda Rapat')->required(),
-                DatePicker::make('tanggal_rapat')->label('Tanggal Rapat')->required(),
-                Select::make('jenis_rapat')
-                    ->label('Jenis Rapat')
-                    ->options([
-                        'online' => 'Online',
-                        'offline' => 'Offline',
-                        'hybrid' => 'Hybrid',
+                Section::make('Informasi Dokumen')
+                    ->description('Data dokumen resmi & penandatangan')
+                    ->schema([
+                        TextInput::make('noDokumen_rapat')->label('No. Dokumen Rapat')->required(),
+                        TextInput::make('noRevisi_rapat')->label('No. Revisi Rapat')->nullable(),
+                        DatePicker::make('tgl_berlaku_rapat')->label('Tanggal Berlaku')->required(),
+                        TextInput::make('penandatangan_jabatan')->placeholder('Direktur Sistem Informasi dan Tranformasi Digital')->label('Jabatan Penandatangan')->required(),
+                        TextInput::make('penandatangan_nama')->label('Nama Penandatangan')->placeholder('Dr. Eng Ady Wahyudi Paundu, ST.,MT.')->required(),
+                        TextInput::make('penandatangan_nip')->placeholder('197503132009121003')->label('NIP Penandatangan')->required(),
                     ])
-                    ->required()
-                    ->reactive() // <-- WAJIB agar bisa trigger visibility field lain
-                    ->afterStateUpdated(fn (callable $set) => $set('lokasi_rapat', null)), // opsional: reset saat berubah
-                TextInput::make('lokasi_rapat')
-                    ->label('Lokasi Rapat')
-                    ->visible(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
-                    ->required(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
-                    ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid'])),
-                TextInput::make('link_meeting')
-                    ->label('Link Meeting')
-                    ->visible(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid']))
-                    ->nullable()
-                    ->required()
-                    ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid'])),
+                    ->columns(1),
 
-                TimePicker::make('waktu_mulai')->label('Waktu Mulai')->required()->withoutSeconds(),
-                TimePicker::make('waktu_selesai')->label('Waktu Selesai')->helperText('Boleh dikosongkan jika belum diketahui')->nullable()->withoutSeconds()
+                Section::make('Informasi Rapat')
+                    ->description('Detail pelaksanaan rapat')
+                    ->schema([
+                        TextInput::make('agenda_rapat')->label('Agenda Rapat')->required(),
+                        DatePicker::make('tanggal_rapat')->label('Tanggal Rapat')->required(),
+                        Select::make('jenis_rapat')
+                            ->label('Jenis Rapat')
+                            ->options([
+                                'online' => 'Online',
+                                'offline' => 'Offline',
+                                'hybrid' => 'Hybrid',
+                            ])
+                            ->required()
+                            ->reactive()
+                            ->afterStateUpdated(fn (callable $set) => $set('lokasi_rapat', null)),
+
+                        TextInput::make('lokasi_rapat')
+                            ->label('Lokasi Rapat')
+                            ->visible(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
+                            ->required(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
+                            ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid'])),
+
+                        TextInput::make('link_meeting')
+                            ->label('Link Meeting')
+                            ->visible(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid']))
+                            ->nullable()
+                            ->required()
+                            ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid'])),
+
+                        TimePicker::make('waktu_mulai')->label('Waktu Mulai')->required()->withoutSeconds(),
+                        TimePicker::make('waktu_selesai')->label('Waktu Selesai')->helperText('Boleh dikosongkan jika belum diketahui')->nullable()->withoutSeconds(),
+
+                    ])->columns(1),
             ])
             ->columns(1);
     }
