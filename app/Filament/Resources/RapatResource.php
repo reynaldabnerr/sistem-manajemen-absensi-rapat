@@ -19,7 +19,6 @@ use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\RapatResource\Pages\ViewKehadiranRapat;
 
-
 class RapatResource extends Resource
 {
     protected static ?string $model = Rapat::class;
@@ -149,7 +148,7 @@ class RapatResource extends Resource
     }
 
     /**
-     * Batasi query agar hanya superadmin bisa lihat semua.
+     * Batasi query agar hanya superadmin bisa lihat semua, dan filter rapat yang belum lewat.
      */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
@@ -159,14 +158,25 @@ class RapatResource extends Resource
         
         // Superadmin can see all rapats
         if ($user->role === 'superadmin') {
-            return $query;
+            // No user-specific filtering for superadmin
+        } else {
+            // Admin can only see rapats they created
+            \Log::info('Filtering rapats for user: ' . $user->id);
+            $query->where('user_id', $user->id);
         }
-        
-        // Admin can only see rapats they created
-        // Add this in the getEloquentQuery method
-        \Log::info('Filtering rapats for user: ' . $user->id);
 
-        return $query->where('user_id', $user->id);
+        // Add filter for future/present meetings
+        $now = now(); // Current date and time in Carbon instance
+
+        $query->where(function (\Illuminate\Database\Eloquent\Builder $q) use ($now) {
+            $q->whereDate('tanggal_rapat', '>', $now->toDateString()) // Rapat di tanggal yang akan datang
+              ->orWhere(function (\Illuminate\Database\Eloquent\Builder $q2) use ($now) {
+                  $q2->whereDate('tanggal_rapat', $now->toDateString()) // Rapat di hari ini
+                     ->whereTime('waktu_mulai', '>=', $now->toTimeString()); // Dan waktu mulai belum lewat
+              });
+        });
+
+        return $query;
     }
 
     /**
@@ -210,8 +220,6 @@ class RapatResource extends Resource
     
         return $data;
     }
-
-
 
     public static function getPages(): array
     {
