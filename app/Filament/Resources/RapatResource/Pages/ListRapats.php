@@ -15,8 +15,9 @@ class ListRapats extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->label('+ Rapat') // Ubah label sesuai keinginan
-                ->modalHeading('Form Tambah Rapat')
+                ->modalHeading('Buat Rapat')
                 ->modalSubmitActionLabel('Simpan Rapat')
+                ->disableCreateAnother()
         ];
     }
 }
