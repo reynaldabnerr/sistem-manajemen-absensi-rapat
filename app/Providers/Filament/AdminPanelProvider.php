@@ -38,6 +38,7 @@ public function panel(Panel $panel): Panel
         ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')
         ->pages([
             Pages\Dashboard::class,
+            \App\Filament\Pages\RapatHistory::class,
         ])
         ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
         ->widgets([

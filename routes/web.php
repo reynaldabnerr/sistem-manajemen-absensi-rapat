@@ -35,3 +35,14 @@ Route::get('/admin/rapats/{rapat}/kehadiran/export', function (Rapat $rapat) {
 
     return $pdf->stream('kehadiran-rapat-' . $rapat->id . '.pdf');
 })->name('rapats.kehadiran.export');
+
+Route::get('/rapat/{rapat}/export-kehadiran', function (App\Models\Rapat $rapat) {
+    $peserta = $rapat->kehadirans()->get();
+    
+    $pdf = PDF::loadView('exports.kehadiran-pdf', [
+        'rapat' => $rapat,
+        'peserta' => $peserta
+    ]);
+    
+    return $pdf->download('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
+})->name('rapats.kehadiran.export');
