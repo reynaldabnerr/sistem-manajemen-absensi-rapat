@@ -15,6 +15,10 @@ class KehadiranRapat extends Model
         'jabatan_tugas',
         'tanda_tangan',
         'rapat_id', // Foreign key
+        'status',
+        'instansi',
+        'no_telepon',
+        'email',
     ];
 
     // Relasi ke Rapat
