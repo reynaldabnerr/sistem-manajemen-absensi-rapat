@@ -13,6 +13,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\UserResource\Pages;
+use Illuminate\Support\Facades\Auth;
 
 class UserResource extends Resource
 {
@@ -104,7 +105,7 @@ class UserResource extends Resource
 
     public static function shouldRegisterNavigation(): bool
     {
-        return auth()->check() && auth()->user()->role === 'superadmin';
+        return Auth::check() && Auth::user() && Auth::user()->role === 'superadmin';
     }
 
     public static function mutateFormDataBeforeCreate(array $data): array
