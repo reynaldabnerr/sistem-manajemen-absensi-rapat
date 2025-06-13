@@ -150,14 +150,10 @@ class ViewKehadiranRapat extends Page implements HasTable
         return [
             Tables\Actions\EditAction::make()
                 ->form([
-                    \Filament\Forms\Components\Select::make('status')
-                        ->label('Jenis Peserta')
-                        ->options([
-                        'pegawai' => 'Pegawai',
-                        'eksternal' => 'Eksternal',
-                        ])
-                        ->required()
-                        ->reactive(),
+                    \Filament\Forms\Components\TextInput::make('status')
+                    ->label('Jenis Peserta')
+                    ->disabled() // Nonaktifkan agar tidak bisa diubah
+                    ->default(fn ($get) => ucfirst($get('status'))),
 
                     TextInput::make('nama')->required(),
                     TextInput::make('nip_nik')->label('NIP/NIK')
