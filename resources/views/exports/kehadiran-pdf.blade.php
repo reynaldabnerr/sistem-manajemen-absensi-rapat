@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>Daftar Hadir</title>
+    <link rel="icon" href="{{ asset('logo/unhas.png') }}" type="image/png">
     <style>
         body {
             font-family: "Times New Roman", Times, serif;
@@ -162,10 +163,10 @@
     <tr>
         <td style="width: 60%;"></td>
         <td style="width: 30%; text-align: left; font-size: 12px;">
-            <div>{{ $rapat->penandatangan_jabatan ?? '-' }}</div>
+            <div>{{ $rapat->penandatangan_jabatan }}</div>
             <br><br><br><br>
-            <div><strong>{{ $rapat->penandatangan_nama ?? '-' }}</strong></div>
-            <div>NIP {{ $rapat->penandatangan_nip ?? '-' }}</div>
+            <div><strong>{{ $rapat->penandatangan_nama }}</strong></div>
+            <div>{{ $rapat->penandatangan_nip }}</div>
         </td>
     </tr>
 </table>
