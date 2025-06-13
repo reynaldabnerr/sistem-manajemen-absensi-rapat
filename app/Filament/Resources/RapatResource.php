@@ -43,9 +43,9 @@ class RapatResource extends Resource
                         TextInput::make('noDokumen_rapat')->label('No. Dokumen Rapat')->required(),
                         TextInput::make('noRevisi_rapat')->label('No. Revisi Rapat')->nullable(),
                         DatePicker::make('tgl_berlaku_rapat')->label('Tanggal Berlaku')->required(),
-                        TextInput::make('penandatangan_jabatan')->placeholder('Direktur Sistem Informasi dan Tranformasi Digital')->label('Jabatan Penandatangan')->required(),
-                        TextInput::make('penandatangan_nama')->label('Nama Penandatangan')->placeholder('Dr. Eng Ady Wahyudi Paundu, ST.,MT.')->required(),
-                        TextInput::make('penandatangan_nip')->placeholder('197503132009121003')->label('NIP Penandatangan')->required(),
+                        TextInput::make('penandatangan_jabatan')->placeholder('Direktur Sistem Informasi dan Tranformasi Digital')->label('Jabatan Penandatangan'),
+                        TextInput::make('penandatangan_nama')->label('Nama Penandatangan')->placeholder('Dr. Eng Ady Wahyudi Paundu, ST.,MT.'),
+                        TextInput::make('penandatangan_nip')->placeholder('NIP 197503132009121003')->label('NIP Penandatangan'),
                     ])
                     ->columns(1),
 
