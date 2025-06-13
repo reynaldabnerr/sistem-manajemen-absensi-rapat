@@ -150,7 +150,7 @@ class ViewKehadiranRapat extends Page implements HasTable
         return [
             Tables\Actions\EditAction::make()
                 ->form([
-                    \Filament\Forms\Components\TextInput::make('status')
+                    TextInput::make('status')
                     ->label('Jenis Peserta')
                     ->disabled() // Nonaktifkan agar tidak bisa diubah
                     ->default(fn ($get) => ucfirst($get('status'))),
