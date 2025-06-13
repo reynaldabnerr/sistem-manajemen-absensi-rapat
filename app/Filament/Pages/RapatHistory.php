@@ -35,13 +35,28 @@ class RapatHistory extends Page implements HasTable
                 
                 $query = Rapat::query()
                     ->where(function ($q) use ($now) {
-                        // Past dates
-                        $q->whereDate('tanggal_rapat', '<', $now->toDateString())
-                           // Or same date but past time
-                           ->orWhere(function ($subQuery) use ($now) {
-                               $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
-                                       ->whereTime('waktu_mulai', '<', $now->toTimeString());
-                           });
+                        // Show only meetings that have truly ended
+                        $q->where(function ($subQuery) use ($now) {
+                            // Past dates
+                            $subQuery->whereDate('tanggal_rapat', '<', $now->toDateString());
+                        })->orWhere(function ($subQuery) use ($now) {
+                            // Today with end time passed
+                            $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
+                                    ->where(function ($endTimeQuery) use ($now) {
+                                        // Either has passed end time
+                                        $endTimeQuery->where(function ($setEndTime) use ($now) {
+                                                $setEndTime->whereNotNull('waktu_selesai')
+                                                          ->whereTime('waktu_selesai', '<', $now->toTimeString());
+                                            })
+                                            // Or has no end time but start time was more than 2 hours ago
+                                            // (assuming meetings without end times last about 2 hours)
+                                            ->orWhere(function ($noEndTime) use ($now) {
+                                                $twoHoursAgo = $now->copy()->subHours(2);
+                                                $noEndTime->whereNull('waktu_selesai')
+                                                         ->whereTime('waktu_mulai', '<', $twoHoursAgo->toTimeString());
+                                            });
+                                    });
+                        });
                     });
                     
                 // If not superadmin, only show own meetings

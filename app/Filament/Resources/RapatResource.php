@@ -165,7 +165,7 @@ class RapatResource extends Resource
     }
 
     /**
-     * Batasi query agar hanya menampilkan rapat yang belum lewat untuk semua user,
+     * Batasi query agar hanya menampilkan rapat yang sedang berlangsung atau akan datang,
      * dan filter berdasarkan user_id untuk non-superadmin.
      */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
@@ -174,15 +174,23 @@ class RapatResource extends Resource
         $user = auth()->user();
         $now = now(); // Current date and time
         
-        // Filter meetings to only show current and future ones
+        // Filter meetings to show ongoing and future ones
         $query->where(function ($q) use ($now) {
             $q->where(function ($subQuery) use ($now) {
                 // Future dates
                 $subQuery->whereDate('tanggal_rapat', '>', $now->toDateString());
             })->orWhere(function ($subQuery) use ($now) {
-                // Today but time hasn't passed yet
+                // Today with time not passed yet
                 $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
-                         ->whereTime('waktu_mulai', '>=', $now->toTimeString());
+                    ->whereTime('waktu_mulai', '>=', $now->toTimeString());
+            })->orWhere(function ($subQuery) use ($now) {
+                // Ongoing meetings (current time is between start and end time)
+                $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
+                    ->whereTime('waktu_mulai', '<', $now->toTimeString())
+                    ->where(function ($q2) use ($now) {
+                        $q2->whereTime('waktu_selesai', '>', $now->toTimeString())
+                            ->orWhereNull('waktu_selesai'); // If end time is not set, consider it ongoing
+                    });
             });
         });
         
