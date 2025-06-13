@@ -45,6 +45,7 @@ class ViewKehadiranRapat extends Page implements HasTable
             Tables\Columns\BadgeColumn::make('status')
                 ->label('Jenis Peserta')
                 ->sortable()
+                ->searchable()
                 ->colors([
                     'info' => fn ($state) => $state === 'pegawai',
                     'warning' => fn ($state) => $state === 'eksternal',
@@ -148,14 +149,18 @@ class ViewKehadiranRapat extends Page implements HasTable
         return [
             Tables\Actions\EditAction::make()
                 ->form([
-                    TextInput::make('status') // Changed to TextInput
+                    \Filament\Forms\Components\Select::make('status')
                         ->label('Jenis Peserta')
-                        ->formatStateUsing(fn ($state) => ucfirst($state)) // Format to display 'Pegawai' or 'Eksternal'
-                        ->disabled() // Make it non-editable
-                        ->dehydrated(false), // Prevent it from being included in the form submission
+                        ->options([
+                        'pegawai' => 'Pegawai',
+                        'eksternal' => 'Eksternal',
+                        ])
+                        ->required()
+                        ->reactive(),
 
                     TextInput::make('nama')->required(),
-                    TextInput::make('nip_nik')->label('NIP/NIK')->required(),
+                    TextInput::make('nip_nik')->label('NIP/NIK')
+                    ->required(fn ($get) => $get('status') === 'pegawai'),
                     TextInput::make('unit_kerja')->required(),
                     TextInput::make('jabatan_tugas')->required(),
 
