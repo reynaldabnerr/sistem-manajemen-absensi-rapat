@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
@@ -121,6 +120,21 @@
         .status-badge.status-upcoming {
             background: linear-gradient(135deg, rgba(224, 231, 255, 1), rgba(199, 210, 254, 1));
             color: rgba(55, 48, 163, 1);
+        }
+
+        /* Status badge for finished meetings */
+        .status-badge.status-finished {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.4rem 1.2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            white-space: nowrap;
+            letter-spacing: 0.025em;
+            background: linear-gradient(135deg, rgba(229, 231, 235, 1), rgba(209, 213, 219, 1));
+            color: rgba(55, 65, 81, 1);
+            box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.15);
         }
 
         /* Enhanced pulse animation */
@@ -419,8 +433,14 @@
                         $endTime = $rapat->waktu_selesai ?
                             \Carbon\Carbon::parse($rapat->tanggal_rapat . ' ' . $rapat->waktu_selesai) :
                             $startTime->copy()->addHours(2);
+                        $afterWindow = $endTime->copy()->addHour(); // 1 hour after meeting ends
+                        
                         $isOngoing = $now->between($startTime, $endTime);
                         $isUpcoming = $now->lessThan($startTime);
+                        $isFinished = $now->greaterThan($endTime);
+                        $isWithinAfterWindow = $now->between($endTime, $afterWindow);
+                        
+                        $canFillAttendance = $isOngoing || $isWithinAfterWindow;
                     @endphp
 
                     <div class="meeting-card glossy animate__animated animate__fadeIn" style="animation-delay: {{ 150 * $index }}ms">
@@ -434,6 +454,13 @@
                                     </span>
                                 @elseif($isUpcoming)
                                     <span class="status-badge status-upcoming">Akan Datang</span>
+                                @elseif($isFinished)
+                                    <span class="status-badge status-finished">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        </svg>
+                                        Sudah Selesai
+                                    </span>
                                 @endif
                             </div>
 
@@ -442,7 +469,8 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="info-icon" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                                            clip-rule="evenodd" />
                                     </svg>
                                     <span class="font-medium">
                                         {{ \Carbon\Carbon::parse($rapat->waktu_mulai)->format('H:i') }} -
@@ -498,14 +526,49 @@
                         </div>
 
                         <div class="bg-gradient-to-r from-indigo-50 to-blue-50 p-5 flex items-center justify-end border-t">
-                            <a href="{{ url('/absensi/' . $rapat->link_absensi) }}" class="btn btn-primary">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-                                    stroke="currentColor" stroke-width="2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                </svg>
-                                Isi Absensi
-                            </a>
+                            @if($canFillAttendance)
+                                <!-- Meeting is ongoing or within 1 hour after ending - enable button -->
+                                <a href="{{ url('/absensi/' . $rapat->link_absensi) }}" class="btn btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                        stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    Isi Absensi
+                                </a>
+                            @elseif($isUpcoming)
+                                <!-- Meeting is upcoming - disable button -->
+                                <div class="group relative">
+                                    <button disabled class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        Belum Dimulai
+                                    </button>
+                                    <div class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                        Absensi hanya dapat diisi saat rapat sedang berlangsung
+                                        <div class="absolute right-4 top-full -mt-1.5 h-3 w-3 rotate-45 bg-gray-800"></div>
+                                    </div>
+                                </div>
+                            @else
+                                <!-- Meeting is finished and beyond the 1-hour window - disable button -->
+                                <div class="group relative">
+                                    <button disabled class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                            stroke="currentColor" stroke-width="2">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
+                                        Waktu Habis
+                                    </button>
+                                    <div class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                        Waktu pengisian absensi telah berakhir (1 jam setelah rapat selesai)
+                                        <div class="absolute right-4 top-full -mt-1.5 h-3 w-3 rotate-45 bg-gray-800"></div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </div>
                 @endforeach
