@@ -45,5 +45,5 @@ Route::get('/rapat/{rapat}/export-kehadiran', function (Rapat $rapat) {
         'kehadiran' => $rapat->kehadirans, // Menambahkan kehadiran di sini
     ]);
     
-    return $pdf->download('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
+    return $pdf->stream('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
 })->name('rapats.kehadiran.export');
