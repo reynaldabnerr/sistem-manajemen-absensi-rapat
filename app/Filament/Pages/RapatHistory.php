@@ -31,8 +31,18 @@ class RapatHistory extends Page implements HasTable
     {
         return $table
             ->query(function (): Builder {
+                $now = now(); // Current date and time
+                
                 $query = Rapat::query()
-                    ->where('tanggal_rapat', '<', Carbon::today());
+                    ->where(function ($q) use ($now) {
+                        // Past dates
+                        $q->whereDate('tanggal_rapat', '<', $now->toDateString())
+                           // Or same date but past time
+                           ->orWhere(function ($subQuery) use ($now) {
+                               $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
+                                       ->whereTime('waktu_mulai', '<', $now->toTimeString());
+                           });
+                    });
                     
                 // If not superadmin, only show own meetings
                 $user = auth()->user();
@@ -40,7 +50,8 @@ class RapatHistory extends Page implements HasTable
                     $query->where('user_id', $user->id);
                 }
                 
-                return $query;
+                return $query->orderBy('tanggal_rapat', 'desc')
+                             ->orderBy('waktu_mulai', 'desc');
             })
             ->columns([
                 Tables\Columns\TextColumn::make('agenda_rapat')

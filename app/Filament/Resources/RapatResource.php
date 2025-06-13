@@ -26,8 +26,8 @@ class RapatResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-document-text';
     protected static ?string $navigationGroup = 'Manajemen Rapat';
-    protected static ?string $navigationLabel = 'Rapat';
-    protected static ?int $navigationSort = 1;
+    protected static ?string $navigationLabel = 'Rapat Aktif'; // Update this to make it clearer
+    protected static ?int $navigationSort = 1; // Ensure this comes before RapatHistory
     protected static ?string $pluralModelLabel = 'Rapat';
 
     public static function form(Form $form): Form
@@ -172,14 +172,18 @@ class RapatResource extends Resource
     {
         $query = parent::getEloquentQuery();
         $user = auth()->user();
-        $today = now();
+        $now = now(); // Current date and time
         
-        // Filter meetings to only show current and future ones for all users
-        $query->where(function ($q) use ($today) {
-            $q->whereDate('tanggal_rapat', '>', $today->toDateString()) // Future dates
-              ->orWhere(function ($q2) use ($today) {
-                  $q2->whereDate('tanggal_rapat', '=', $today->toDateString()); // Today
-              });
+        // Filter meetings to only show current and future ones
+        $query->where(function ($q) use ($now) {
+            $q->where(function ($subQuery) use ($now) {
+                // Future dates
+                $subQuery->whereDate('tanggal_rapat', '>', $now->toDateString());
+            })->orWhere(function ($subQuery) use ($now) {
+                // Today but time hasn't passed yet
+                $subQuery->whereDate('tanggal_rapat', '=', $now->toDateString())
+                         ->whereTime('waktu_mulai', '>=', $now->toTimeString());
+            });
         });
         
         // Additionally, filter by user_id for non-superadmins
