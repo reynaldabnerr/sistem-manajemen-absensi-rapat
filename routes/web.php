@@ -10,7 +10,7 @@ Route::get('/', function () {
     $todayRapats = Rapat::whereDate('tanggal_rapat', $today)
         ->orderBy('waktu_mulai', 'asc')
         ->get();
-        
+
     return view('welcome', compact('todayRapats'));
 });
 
@@ -38,12 +38,12 @@ Route::get('/admin/rapats/{rapat}/kehadiran/export', function (Rapat $rapat) {
 
 Route::get('/rapat/{rapat}/export-kehadiran', function (Rapat $rapat) {
     $peserta = $rapat->kehadirans()->get();
-    
+
     $pdf = PDF::loadView('exports.kehadiran-pdf', [
         'rapat' => $rapat,
         'peserta' => $peserta,
         'kehadiran' => $rapat->kehadirans, // Menambahkan kehadiran di sini
     ]);
-    
-    return $pdf->download('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
+
+    return $pdf->stream('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
 })->name('rapats.kehadiran.export');
