@@ -49,7 +49,7 @@ class UpcomingRapatWidget extends BaseWidget
             Stat::make('Rapat Minggu Ini', $nextWeekRapatCount)
                 ->description('Jadwal rapat dalam seminggu ke depan')
                 ->descriptionIcon('heroicon-m-calendar')
-                ->color('warning')
+                ->color('info')
                 ->chart([5, 3, 4, 5, 6, 3, 5, 3])
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
