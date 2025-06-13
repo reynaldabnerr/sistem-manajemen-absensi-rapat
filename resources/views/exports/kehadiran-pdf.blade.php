@@ -125,11 +125,14 @@
     <thead>
         <tr>
             <th style="width: 5%;">No.</th>
-            <th style="width: 20%;">Nama</th>
+            <th style="width: 10%;">Nama</th>
             <th style="width: 15%;">NIP/NIK</th>
-            <th style="width: 20%;">Unit Kerja</th>
-            <th style="width: 20%;">Jabatan/Tugas</th>
-            <th style="width: 20%;">Tanda Tangan</th>
+            <th style="width: 10%;">Unit Kerja</th>
+            <th style="width: 10%;">Jabatan/Tugas</th>
+            <th style="width: 10%;">Instansi</th>
+            <th style="width: 10%;">No. Telepon</th>
+            <th style="width: 10%;">Email</th>
+            <th style="width: 10%;">Tanda Tangan</th>
         </tr>
     </thead>
     <tbody>
@@ -140,6 +143,9 @@
                 <td>{{ $item->nip_nik }}</td>
                 <td>{{ $item->unit_kerja }}</td>
                 <td>{{ $item->jabatan_tugas }}</td>
+                <td>{{ $item->instansi }}</td>
+                <td>{{ $item->no_telepon }}</td>
+                <td>{{ $item->email }}</td>
                 <td class="signature">
                     @if (Str::startsWith($item->tanda_tangan, 'data:image'))
                         <img src="{{ $item->tanda_tangan }}" style="height: 60px;">
