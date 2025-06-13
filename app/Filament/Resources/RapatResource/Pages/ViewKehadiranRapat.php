@@ -118,7 +118,8 @@ class ViewKehadiranRapat extends Page implements HasTable
                         ->reactive(),
 
                     TextInput::make('nama')->required(),
-                    TextInput::make('nip_nik')->label('NIP/NIK')->required(),
+                    TextInput::make('nip_nik')->label('NIP/NIK')
+                        ->required(fn ($get) => $get('status') === 'pegawai'),
                     TextInput::make('unit_kerja')->required(),
                     TextInput::make('jabatan_tugas')->label('Jabatan/Tugas')->required(),
 
