@@ -165,34 +165,28 @@ class RapatResource extends Resource
     }
 
     /**
-     * Batasi query agar hanya superadmin bisa lihat semua, dan filter rapat yang belum lewat.
+     * Batasi query agar hanya menampilkan rapat yang belum lewat untuk semua user,
+     * dan filter berdasarkan user_id untuk non-superadmin.
      */
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         $query = parent::getEloquentQuery();
-        
         $user = auth()->user();
+        $today = now();
         
-        // Superadmin can see all rapats
-        if ($user->role === 'superadmin') {
-            // No user-specific filtering for superadmin
-        } else {
-            // Admin can only see rapats they created
-            \Log::info('Filtering rapats for user: ' . $user->id);
-            $query->where('user_id', $user->id);
-        }
-
-        // Add filter for future/present meetings
-        $now = now(); // Current date and time in Carbon instance
-
-        $query->where(function (\Illuminate\Database\Eloquent\Builder $q) use ($now) {
-            $q->whereDate('tanggal_rapat', '>', $now->toDateString()) // Rapat di tanggal yang akan datang
-              ->orWhere(function (\Illuminate\Database\Eloquent\Builder $q2) use ($now) {
-                  $q2->whereDate('tanggal_rapat', $now->toDateString()) // Rapat di hari ini
-                     ->whereTime('waktu_mulai', '>=', $now->toTimeString()); // Dan waktu mulai belum lewat
+        // Filter meetings to only show current and future ones for all users
+        $query->where(function ($q) use ($today) {
+            $q->whereDate('tanggal_rapat', '>', $today->toDateString()) // Future dates
+              ->orWhere(function ($q2) use ($today) {
+                  $q2->whereDate('tanggal_rapat', '=', $today->toDateString()); // Today
               });
         });
-
+        
+        // Additionally, filter by user_id for non-superadmins
+        if ($user->role !== 'superadmin') {
+            $query->where('user_id', $user->id);
+        }
+        
         return $query;
     }
 
