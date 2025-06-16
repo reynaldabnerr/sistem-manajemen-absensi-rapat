@@ -4,6 +4,9 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Rapat;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
+use App\Models\UnitKerja;
+use App\Models\User;
+use Filament\Notifications\Notification;
 
 Route::get('/', function () {
     $today = Carbon::today();
@@ -47,3 +50,46 @@ Route::get('/rapat/{rapat}/export-kehadiran', function (Rapat $rapat) {
     
     return $pdf->stream('Daftar-Hadir-' . \Str::slug($rapat->agenda_rapat) . '.pdf');
 })->name('rapats.kehadiran.export');
+
+// Add this inside your auth middleware group 
+Route::middleware(['auth'])->group(function () {
+    // Route untuk menghapus unit kerja
+    Route::delete('/admin/delete-unit-kerja/{unitKerja}', function (UnitKerja $unitKerja) {
+        // Hanya superadmin yang dapat melakukan ini
+        if (auth()->user()->role !== 'superadmin') {
+            abort(403);
+        }
+        
+        // Protect the Superadmin unit kerja
+        if ($unitKerja->nama === 'Superadmin') {
+            Notification::make()
+                ->title('Unit Kerja Dilindungi')
+                ->body("Unit kerja 'Superadmin' tidak dapat dihapus.")
+                ->warning()
+                ->send();
+                
+            return redirect()->back();
+        }
+        
+        // Get name before deletion for notification
+        $unitKerjaName = $unitKerja->nama;
+        
+        // Count and delete users
+        $affectedUsers = User::where('unit_kerja_id', $unitKerja->id)->count();
+        User::where('unit_kerja_id', $unitKerja->id)->delete();
+        
+        // Delete the unit kerja
+        $unitKerja->delete();
+        
+        // Debug logging
+        \Log::info("Unit kerja berhasil dihapus: {$unitKerjaName} dengan {$affectedUsers} pengguna");
+        
+        Notification::make()
+            ->title('Unit Kerja Dihapus')
+            ->body("Unit kerja '{$unitKerjaName}' dan {$affectedUsers} pengguna terkait telah dihapus.")
+            ->success()
+            ->send();
+            
+        return redirect()->back();
+    })->name('admin.delete-unit-kerja');
+});

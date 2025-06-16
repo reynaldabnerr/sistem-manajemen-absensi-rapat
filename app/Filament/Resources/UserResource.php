@@ -9,10 +9,15 @@ use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use App\Filament\Resources\UserResource\Pages;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\Checkbox;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserResource extends Resource
 {
@@ -58,14 +63,13 @@ class UserResource extends Resource
                 ->preload()
                 ->required()
                 ->visible(fn() => auth()->user()?->role === 'superadmin')
-                ->createOptionForm([ // tetap bisa nambah unit kerja baru dari dropdown
+                ->createOptionForm([
                     TextInput::make('nama')
                         ->label('Nama Unit Kerja')
                         ->required()
                         ->unique(UnitKerja::class, 'nama'),
                 ])
                 ->createOptionUsing(fn(array $data): int => UnitKerja::create($data)->id),
-
         ]);
     }
 
@@ -86,9 +90,67 @@ class UserResource extends Resource
                 TextColumn::make('unitKerja.nama')->label('Unit Kerja')->sortable()->searchable(),
                 TextColumn::make('created_at')->label('Created At')->dateTime()->sortable(),
             ])
+            ->filters([
+                // Add a filter to easily select users by their unit kerja
+                SelectFilter::make('unit_kerja')
+                    ->relationship('unitKerja', 'nama')
+                    ->label('Unit Kerja')
+                    ->searchable()
+                    ->preload(),
+            ])
             ->actions([
                 EditAction::make(),
                 DeleteAction::make(),
+
+                // Add action to delete unit kerja and associated users
+                Action::make('deleteUnitKerja')
+                    ->label('Hapus Unit Kerja')
+                    ->icon('heroicon-o-trash')
+                    ->color('danger')
+                    ->visible(
+                        fn(User $record): bool =>
+                        auth()->user()->role === 'superadmin' &&
+                        $record->unitKerja !== null
+                    )
+                    ->requiresConfirmation()
+                    ->modalHeading(fn(User $record) => "Hapus Unit Kerja: {$record->unitKerja->nama}")
+                    ->modalDescription(
+                        fn(User $record) =>
+                        "PERHATIAN: Anda akan menghapus unit kerja '{$record->unitKerja->nama}' dan SEMUA pengguna yang terdaftar di unit kerja tersebut. Tindakan ini tidak dapat dibatalkan."
+                    )
+                    ->form([
+                        Checkbox::make('confirm')
+                            ->label('Saya memahami bahwa semua pengguna dari unit kerja ini akan dihapus')
+                            ->required()
+                    ])
+                    ->action(function (User $record, array $data) {
+                        if (!$data['confirm'] || !$record->unitKerja) {
+                            return;
+                        }
+
+                        $unitKerja = $record->unitKerja;
+                        $unitKerjaName = $unitKerja->nama;
+
+                        // Count users that will be deleted
+                        $affectedUsersCount = User::where('unit_kerja_id', $unitKerja->id)->count();
+
+                        // Delete all users from this unit kerja
+                        User::where('unit_kerja_id', $unitKerja->id)->delete();
+
+                        // Delete the unit kerja
+                        $unitKerja->delete();
+
+                        Notification::make()
+                            ->title('Unit Kerja Dihapus')
+                            ->body("Unit kerja '{$unitKerjaName}' dan {$affectedUsersCount} pengguna terkait telah dihapus.")
+                            ->success()
+                            ->send();
+                    }),
+            ])
+            ->bulkActions([
+                \Filament\Tables\Actions\BulkActionGroup::make([
+                    \Filament\Tables\Actions\DeleteBulkAction::make(),
+                ])
             ])
             ->defaultSort('created_at', 'desc');
     }
