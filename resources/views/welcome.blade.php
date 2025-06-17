@@ -7,7 +7,9 @@
     <title>Portal Absensi Rapat - Universitas Hasanuddin</title>
     <link rel="icon" href="{{ asset('logo/unhas.png') }}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
         :root {
@@ -268,6 +270,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -313,7 +316,7 @@
             .status-badge {
                 align-self: flex-start;
             }
-            
+
             .meeting-card-content {
                 padding: 1.5rem;
             }
@@ -338,12 +341,12 @@
         .wave-divider .shape-fill {
             fill: #FFFFFF;
         }
-        
+
         /* Glossy effect for cards */
         .glossy {
             position: relative;
         }
-        
+
         .glossy::before {
             content: '';
             position: absolute;
@@ -351,17 +354,17 @@
             left: 0;
             right: 0;
             height: 30%;
-            background: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0));
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
             border-radius: 1.25rem 1.25rem 0 0;
             z-index: 1;
             pointer-events: none;
         }
-        
+
         /* Enhanced empty state */
         .empty-state-container {
-            background: radial-gradient(circle at center, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%);
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 1) 0%, rgba(248, 250, 252, 1) 100%);
         }
-        
+
         /* Glass effect for info boxes */
         .glass-effect {
             background: rgba(255, 255, 255, 0.8);
@@ -378,22 +381,29 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
             <div class="flex items-center space-x-3">
                 <div class="relative">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full blur opacity-30 animate__animated animate__pulse animate__infinite"></div>
+                    <div
+                        class="absolute -inset-1 bg-gradient-to-r from-indigo-500 to-blue-500 rounded-full blur opacity-30 animate__animated animate__pulse animate__infinite">
+                    </div>
                     <div class="relative">
-                        <img src="{{ asset('logo/unhas.png') }}" alt="Logo Unhas" class="h-12 sm:h-14 animate__animated animate__fadeIn">
+                        <img src="{{ asset('logo/unhas.png') }}" alt="Logo Unhas"
+                            class="h-12 sm:h-14 animate__animated animate__fadeIn">
                     </div>
                 </div>
                 <div>
-                    <h1 class="font-display font-extrabold text-transparent text-lg sm:text-xl bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">Universitas Hasanuddin</h1>
+                    <h1
+                        class="font-display font-extrabold text-transparent text-lg sm:text-xl bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-500">
+                        Universitas Hasanuddin</h1>
                     <p class="text-sm text-gray-600 font-medium">Portal Absensi Rapat</p>
                 </div>
             </div>
-            <a href="/admin"
-                class="text-sm flex items-center font-medium relative group">
-                <span class="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-indigo-500 group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                <span class="absolute inset-0 w-full h-full bg-white border-2 border-indigo-500 group-hover:bg-indigo-500"></span>
+            <a href="/admin" class="text-sm flex items-center font-medium relative group">
+                <span
+                    class="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-indigo-500 group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                <span
+                    class="absolute inset-0 w-full h-full bg-white border-2 border-indigo-500 group-hover:bg-indigo-500"></span>
                 <span class="relative text-indigo-500 group-hover:text-white px-4 py-2 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20"
+                        fill="currentColor">
                         <path fill-rule="evenodd"
                             d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
                             clip-rule="evenodd" />
@@ -408,16 +418,21 @@
     <section class="hero-gradient py-20 sm:py-24 relative">
         <div class="hero-pattern"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-            <h2 class="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-white tracking-tight mb-4 animate__animated animate__fadeInUp">
+            <h2
+                class="text-3xl sm:text-4xl md:text-5xl font-display font-extrabold text-white tracking-tight mb-4 animate__animated animate__fadeInUp">
                 Jadwal Rapat Hari Ini
             </h2>
-            <p class="text-indigo-100 text-xl md:text-2xl animate__animated animate__fadeInUp animate__delay-1s font-light">
+            <p
+                class="text-indigo-100 text-xl md:text-2xl animate__animated animate__fadeInUp animate__delay-1s font-light">
                 {{ \Carbon\Carbon::today()->locale('id')->translatedFormat('l, d F Y') }}
             </p>
         </div>
         <div class="wave-divider">
-            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
-                <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="shape-fill"></path>
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"
+                preserveAspectRatio="none">
+                <path
+                    d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z"
+                    class="shape-fill"></path>
             </svg>
         </div>
     </section>
@@ -434,16 +449,17 @@
                             \Carbon\Carbon::parse($rapat->tanggal_rapat . ' ' . $rapat->waktu_selesai) :
                             $startTime->copy()->addHours(2);
                         $afterWindow = $endTime->copy()->addHour(); // 1 hour after meeting ends
-                        
+
                         $isOngoing = $now->between($startTime, $endTime);
                         $isUpcoming = $now->lessThan($startTime);
                         $isFinished = $now->greaterThan($endTime);
                         $isWithinAfterWindow = $now->between($endTime, $afterWindow);
-                        
+
                         $canFillAttendance = $isOngoing || $isWithinAfterWindow;
                     @endphp
 
-                    <div class="meeting-card glossy animate__animated animate__fadeIn" style="animation-delay: {{ 150 * $index }}ms">
+                    <div class="meeting-card glossy animate__animated animate__fadeIn"
+                        style="animation-delay: {{ 150 * $index }}ms">
                         <div class="meeting-card-content">
                             <div class="meeting-card-header">
                                 <h3 class="font-bold text-xl text-gray-800 leading-tight">{{ $rapat->agenda_rapat }}</h3>
@@ -456,8 +472,11 @@
                                     <span class="status-badge status-upcoming">Akan Datang</span>
                                 @elseif($isFinished)
                                     <span class="status-badge status-finished">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20"
+                                            fill="currentColor">
+                                            <path fill-rule="evenodd"
+                                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                                clip-rule="evenodd" />
                                         </svg>
                                         Sudah Selesai
                                     </span>
@@ -539,7 +558,8 @@
                             @elseif($isUpcoming)
                                 <!-- Meeting is upcoming - disable button -->
                                 <div class="group relative">
-                                    <button disabled class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
+                                    <button disabled
+                                        class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -547,7 +567,8 @@
                                         </svg>
                                         Belum Dimulai
                                     </button>
-                                    <div class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                    <div
+                                        class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
                                         Absensi hanya dapat diisi saat rapat sedang berlangsung
                                         <div class="absolute right-4 top-full -mt-1.5 h-3 w-3 rotate-45 bg-gray-800"></div>
                                     </div>
@@ -555,7 +576,8 @@
                             @else
                                 <!-- Meeting is finished and beyond the 1-hour window - disable button -->
                                 <div class="group relative">
-                                    <button disabled class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
+                                    <button disabled
+                                        class="btn border-0 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-500 cursor-not-allowed opacity-80">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
                                             stroke="currentColor" stroke-width="2">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -563,7 +585,8 @@
                                         </svg>
                                         Waktu Habis
                                     </button>
-                                    <div class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
+                                    <div
+                                        class="absolute bottom-full mb-2 right-0 w-48 rounded-md shadow-lg bg-gray-800 text-white text-sm py-2 px-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10">
                                         Waktu pengisian absensi telah berakhir (1 jam setelah rapat selesai)
                                         <div class="absolute right-4 top-full -mt-1.5 h-3 w-3 rotate-45 bg-gray-800"></div>
                                     </div>
@@ -576,7 +599,8 @@
 
             <!-- Enhanced instructions section -->
             <div class="mt-20 glass-effect rounded-2xl shadow-lg p-8 border border-indigo-100">
-                <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-8 flex items-center">
+                <h3
+                    class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-8 flex items-center">
                     <div class="bg-gradient-to-r from-indigo-100 to-blue-100 p-3 rounded-xl mr-5 shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-indigo-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -587,31 +611,38 @@
                     Cara Mengisi Absensi
                 </h3>
                 <ol class="list-decimal ml-5 lg:ml-16 space-y-4 text-gray-700">
-                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Klik tombol <strong class="text-indigo-600 font-semibold px-2 py-0.5 bg-indigo-50 rounded-md">"Isi Absensi"</strong> pada rapat yang
+                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Klik tombol <strong
+                            class="text-indigo-600 font-semibold px-2 py-0.5 bg-indigo-50 rounded-md">"Isi Absensi"</strong>
+                        pada rapat yang
                         sedang atau akan berlangsung.</li>
                     <li class="pl-2 border-l-4 border-indigo-200 py-1">Anda akan diarahkan ke halaman formulir absensi.</li>
-                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Isi formulir dengan data diri yang benar (Nama, NIP/NIK, Unit Kerja, dll.).</li>
-                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Berikan tanda tangan digital Anda pada kolom yang telah disediakan.</li>
-                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Pastikan semua data sudah benar, lalu klik tombol <strong
-                            class="text-green-600 font-semibold px-2 py-0.5 bg-green-50 rounded-md">"Submit"</strong> untuk merekam kehadiran Anda.</li>
+                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Isi formulir dengan data diri yang benar (Nama,
+                        NIP/NIK, Unit Kerja, dll.).</li>
+                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Berikan tanda tangan digital Anda pada kolom yang
+                        telah disediakan.</li>
+                    <li class="pl-2 border-l-4 border-indigo-200 py-1">Pastikan semua data sudah benar, lalu klik tombol
+                        <strong class="text-green-600 font-semibold px-2 py-0.5 bg-green-50 rounded-md">"Submit"</strong>
+                        untuk merekam kehadiran Anda.</li>
                 </ol>
             </div>
         @else
             <!-- Enhanced empty state -->
-            <div class="empty-state-container text-center py-24 px-6 bg-white rounded-2xl shadow-xl border border-indigo-100 animate__animated animate__fadeIn relative overflow-hidden">
+            <div
+                class="empty-state-container text-center py-24 px-6 bg-white rounded-2xl shadow-xl border border-indigo-100 animate__animated animate__fadeIn relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-b from-white via-indigo-50/20 to-blue-50/20 z-0"></div>
                 <div class="relative z-10">
-                    <img src="https://absensi.unhas.ac.id/images/no-meetings.svg" alt="Tidak Ada Rapat"
-                        class="w-64 mx-auto mb-10 drop-shadow-lg"
-                        onerror="this.src='https://cdn.pixabay.com/photo/2017/03/29/04/09/check-icon-2184719_1280.png';this.onerror='';">
-                    <h3 class="text-3xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-3">Tidak Ada Jadwal Rapat</h3>
-                    <p class="text-gray-600 max-w-lg mx-auto mb-10 text-lg">Saat ini tidak ada jadwal rapat untuk hari ini. Silakan
+                    <h3
+                        class="text-3xl font-display font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-3">
+                        Tidak Ada Jadwal Rapat</h3>
+                    <p class="text-gray-600 max-w-lg mx-auto mb-10 text-lg">Saat ini tidak ada jadwal rapat untuk hari ini.
+                        Silakan
                         periksa kembali nanti atau hubungi administrator untuk informasi lebih lanjut.</p>
 
                     <div class="inline-flex rounded-md shadow-lg">
                         <a href="/" class="btn btn-primary group">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor" stroke-width="2">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                class="h-5 w-5 mr-2 transition-transform group-hover:rotate-180" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                             </svg>
@@ -622,9 +653,11 @@
             </div>
 
             <!-- Enhanced info box -->
-            <div class="mt-16 p-8 bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-indigo-100/80 shadow-lg animate__animated animate__fadeIn animate__delay-1s">
+            <div
+                class="mt-16 p-8 bg-gradient-to-br from-indigo-50 to-white rounded-2xl border border-indigo-100/80 shadow-lg animate__animated animate__fadeIn animate__delay-1s">
                 <div class="flex flex-col md:flex-row items-center">
-                    <div class="bg-gradient-to-br from-indigo-100 to-blue-100 p-4 rounded-xl flex-shrink-0 mb-6 md:mb-0 md:mr-6 shadow-inner">
+                    <div
+                        class="bg-gradient-to-br from-indigo-100 to-blue-100 p-4 rounded-xl flex-shrink-0 mb-6 md:mb-0 md:mr-6 shadow-inner">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-indigo-600" fill="none"
                             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -632,9 +665,13 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-3">Jadwal Rapat Mendatang</h3>
-                        <p class="text-gray-700 text-lg">Untuk melihat jadwal rapat di hari lain, silakan hubungi administrator atau
-                            cek kembali portal ini secara berkala. Anda juga dapat menghubungi kami melalui email yang tersedia di bawah halaman ini.</p>
+                        <h3
+                            class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 mb-3">
+                            Jadwal Rapat Mendatang</h3>
+                        <p class="text-gray-700 text-lg">Untuk melihat jadwal rapat di hari lain, silakan hubungi
+                            administrator atau
+                            cek kembali portal ini secara berkala. Anda juga dapat menghubungi kami melalui email yang
+                            tersedia di bawah halaman ini.</p>
                     </div>
                 </div>
             </div>
@@ -648,19 +685,23 @@
                 <div class="md:flex md:items-center md:justify-between">
                     <div class="flex items-center justify-center md:justify-start">
                         <div class="mr-5 relative">
-                            <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-40"></div>
+                            <div
+                                class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full blur opacity-40">
+                            </div>
                             <img src="{{ asset('logo/unhas.png') }}" alt="Logo Unhas" class="h-12 relative">
                         </div>
                         <div>
-                            <p class="font-display text-xl text-white font-bold">&copy; {{ date('Y') }} Universitas Hasanuddin</p>
+                            <p class="font-display text-xl text-white font-bold">&copy; {{ date('Y') }} Universitas
+                                Hasanuddin</p>
                             <p class="text-indigo-300 mt-1">Sistem Manajemen Absensi Rapat</p>
                         </div>
                     </div>
                     <div class="mt-8 md:mt-0 text-center md:text-right">
                         <p class="text-indigo-300 mb-2 font-medium">Butuh bantuan?</p>
-                        <a href="mailto:support@unhas.ac.id" 
-                           class="inline-flex items-center text-white hover:text-indigo-200 font-medium bg-gradient-to-r from-indigo-800/50 to-blue-800/50 px-4 py-2 rounded-lg transition-all hover:from-indigo-700/50 hover:to-blue-700/50">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <a href="mailto:support@unhas.ac.id"
+                            class="inline-flex items-center text-white hover:text-indigo-200 font-medium bg-gradient-to-r from-indigo-800/50 to-blue-800/50 px-4 py-2 rounded-lg transition-all hover:from-indigo-700/50 hover:to-blue-700/50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                                fill="currentColor">
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                             </svg>
