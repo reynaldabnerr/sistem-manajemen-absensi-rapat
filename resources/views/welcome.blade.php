@@ -438,7 +438,7 @@
     </section>
 
     <!-- Enhanced main content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative -mt-10">
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 relative -mt-4">
         @if(isset($todayRapats) && $todayRapats->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 lg:gap-10">
                 @foreach($todayRapats as $index => $rapat)
