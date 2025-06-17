@@ -6,8 +6,6 @@ use Filament\Pages\Page;
 use Filament\Tables\Table;
 use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\DeleteAction;
 use Carbon\Carbon;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
