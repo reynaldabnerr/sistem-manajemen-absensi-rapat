@@ -63,20 +63,20 @@ class RapatResource extends Resource
                             ])
                             ->required()
                             ->reactive()
-                            ->afterStateUpdated(fn (callable $set) => $set('lokasi_rapat', null)),
+                            ->afterStateUpdated(fn(callable $set) => $set('lokasi_rapat', null)),
 
                         TextInput::make('lokasi_rapat')
                             ->label('Lokasi Rapat')
-                            ->visible(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
-                            ->required(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
-                            ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid'])),
+                            ->visible(fn($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
+                            ->required(fn($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid']))
+                            ->dehydrated(fn($get) => in_array($get('jenis_rapat'), ['offline', 'hybrid'])),
 
                         TextInput::make('link_meeting')
                             ->label('Link Meeting')
-                            ->visible(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid']))
+                            ->visible(fn($get) => in_array($get('jenis_rapat'), ['online', 'hybrid']))
                             ->nullable()
                             ->required()
-                            ->dehydrated(fn ($get) => in_array($get('jenis_rapat'), ['online', 'hybrid'])),
+                            ->dehydrated(fn($get) => in_array($get('jenis_rapat'), ['online', 'hybrid'])),
 
                         TimePicker::make('waktu_mulai')->label('Waktu Mulai')->required()->withoutSeconds(),
                         TimePicker::make('waktu_selesai')->label('Waktu Selesai')->helperText('Boleh dikosongkan jika belum diketahui')->nullable()->withoutSeconds(),
@@ -146,24 +146,11 @@ class RapatResource extends Resource
                 TextColumn::make('link_absensi')
                     ->label('Copy Link')
                     ->getStateUsing(fn($record) => url('/absensi/' . $record->link_absensi))
-                    ->copyable()
-                    ->limit(20),
+                    ->copyable(),
 
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y H:i'),
-            ])
+                ])
             ->actions([
-                // Menambahkan tombol copy link absensi
-                Tables\Actions\Action::make('copyLink')
-                    ->label('Copy Link')
-                    ->icon('heroicon-o-clipboard-copy')
-                    ->tooltip('Salin link absensi rapat')
-                    ->color('success')
-                    ->action(fn ($record) => null) // Tidak perlu action karena menggunakan JS
-                    ->extraAttributes([
-                        'x-data' => '{}',
-                        'x-on:click' => 'navigator.clipboard.writeText("'.url('/').'/absensi/" + $wire.mountedTableActionsData.componentData.record.link_absensi); $wireui.notify({ title: "Link berhasil disalin!", icon: "success" })',
-                    ]),
-                    
                 Tables\Actions\EditAction::make()
                     ->modalHeading('Edit Rapat')
                     ->modalSubmitActionLabel('Simpan Perubahan'),
@@ -185,7 +172,7 @@ class RapatResource extends Resource
         $query = parent::getEloquentQuery();
         $user = auth()->user();
         $now = now(); // Current date and time
-        
+
         // Filter meetings to show ongoing and future ones
         $query->where(function ($q) use ($now) {
             $q->where(function ($subQuery) use ($now) {
@@ -205,12 +192,12 @@ class RapatResource extends Resource
                     });
             });
         });
-        
+
         // Additionally, filter by user_id for non-superadmins
         if ($user->role !== 'superadmin') {
             $query->where('user_id', $user->id);
         }
-        
+
         return $query;
     }
 
@@ -231,7 +218,7 @@ class RapatResource extends Resource
         }
 
         $data['user_id'] = auth()->id();
-        
+
         // Add this debugging code in the mutateFormDataBeforeCreate method
         \Log::info('Creating rapat for user: ' . auth()->id(), $data);
 
@@ -252,7 +239,7 @@ class RapatResource extends Resource
         }
 
         $data['user_id'] = auth()->id();
-    
+
         return $data;
     }
 
