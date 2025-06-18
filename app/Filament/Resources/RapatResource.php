@@ -152,6 +152,18 @@ class RapatResource extends Resource
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y H:i'),
             ])
             ->actions([
+                // Menambahkan tombol copy link absensi
+                Tables\Actions\Action::make('copyLink')
+                    ->label('Copy Link')
+                    ->icon('heroicon-o-clipboard-copy')
+                    ->tooltip('Salin link absensi rapat')
+                    ->color('success')
+                    ->action(fn ($record) => null) // Tidak perlu action karena menggunakan JS
+                    ->extraAttributes([
+                        'x-data' => '{}',
+                        'x-on:click' => 'navigator.clipboard.writeText("'.url('/').'/absensi/" + $wire.mountedTableActionsData.componentData.record.link_absensi); $wireui.notify({ title: "Link berhasil disalin!", icon: "success" })',
+                    ]),
+                    
                 Tables\Actions\EditAction::make()
                     ->modalHeading('Edit Rapat')
                     ->modalSubmitActionLabel('Simpan Perubahan'),
