@@ -17,7 +17,6 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use App\Http\Middleware\CheckAdminRole;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -44,8 +43,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 Widgets\AccountWidget::class,
-                // HAPUS FilamentInfoWidget jika ingin hilangkan info v3.x.x
-                // Widgets\FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -60,7 +57,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                CheckAdminRole::class, // Add our custom middleware
             ]);
     }
 }
