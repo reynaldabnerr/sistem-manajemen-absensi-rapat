@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\RapatResource\Pages;
 use App\Models\Rapat;
 use App\Models\UnitKerja;
+use Doctrine\DBAL\Query\Limit;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -146,6 +147,7 @@ class RapatResource extends Resource
                 TextColumn::make('link_absensi')
                     ->label('Copy Link')
                     ->getStateUsing(fn($record) => url('/absensi/' . $record->link_absensi))
+                    ->limit(10)
                     ->copyable(),
 
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y H:i'),
