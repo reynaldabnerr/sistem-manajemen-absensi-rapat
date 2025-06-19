@@ -42,18 +42,25 @@ class AbsensiController extends Controller
 
         $validated = $request->validate($rules);
 
-        // Cek apakah data pegawai sudah ada
+        // Cek apakah data dengan NIP/NIK yang sama sudah ada
         $kehadiran = null;
-        if ($status === 'pegawai') {
+        if (!empty($validated['nip_nik'])) {
             $kehadiran = KehadiranRapat::where('rapat_id', $rapat->id)
                 ->where('nip_nik', $validated['nip_nik'])
                 ->first();
         }
 
         if ($kehadiran) {
-            // Sudah ada → update tanda tangan
+            // Sudah ada → update data
             $kehadiran->update([
+                'status' => $status,
+                'nama' => $validated['nama'],
+                'unit_kerja' => $validated['unit_kerja'],
+                'jabatan_tugas' => $validated['jabatan_tugas'],
                 'tanda_tangan' => $validated['tanda_tangan'],
+                'instansi' => $validated['instansi'] ?? $kehadiran->instansi,
+                'no_telepon' => $validated['no_telepon'] ?? $kehadiran->no_telepon,
+                'email' => $validated['email'] ?? $kehadiran->email,
             ]);
         } else {
             // Data baru → insert
