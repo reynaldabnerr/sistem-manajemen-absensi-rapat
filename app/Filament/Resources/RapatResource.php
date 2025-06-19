@@ -20,6 +20,10 @@ use Filament\Forms\Components\Hidden;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Resources\RapatResource\Pages\ViewKehadiranRapat;
 use Filament\Forms\Components\Section;
+use Filament\Support\Enums\Alignment;
+use Filament\Support\Enums\FontWeight;
+use Illuminate\View\View;
+use Illuminate\Support\HtmlString;
 
 class RapatResource extends Resource
 {
@@ -151,7 +155,32 @@ class RapatResource extends Resource
                     ->copyable(),
 
                 TextColumn::make('created_at')->label('Dibuat')->dateTime('d M Y H:i'),
-                ])
+
+                TextColumn::make('status')
+                    ->label('Status')
+                    ->badge()
+                    ->getStateUsing(function ($record) {
+                        $now = now();
+                        $meetingDate = \Carbon\Carbon::parse($record->tanggal_rapat);
+                        $startTime = \Carbon\Carbon::parse($record->tanggal_rapat . ' ' . $record->waktu_mulai);
+                        $endTime = $record->waktu_selesai ?
+                            \Carbon\Carbon::parse($record->tanggal_rapat . ' ' . $record->waktu_selesai) :
+                            $startTime->copy()->addHours(2); // Default 2 hours if not specified
+            
+                        if ($now < $startTime) {
+                            return 'upcoming';
+                        } elseif ($now >= $startTime && $now <= $endTime) {
+                            return 'ongoing';
+                        } else {
+                            return 'completed';
+                        }
+                    })
+                    ->colors([
+                        'warning' => 'upcoming',
+                        'success' => 'ongoing',
+                        'gray' => 'completed',
+                    ]),
+            ])
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->modalHeading('Edit Rapat')
@@ -161,6 +190,15 @@ class RapatResource extends Resource
                     ->label('Lihat Kehadiran')
                     ->icon('heroicon-o-eye')
                     ->url(fn($record) => RapatResource::getUrl('viewKehadiran', ['record' => $record])),
+                Tables\Actions\Action::make('generateQrCode')
+                    ->label('QR Code')
+                    ->icon('heroicon-o-qr-code')
+                    ->modalHeading('QR Code Presensi')
+                    ->modalContent(function ($record) {
+                        return view('components.qr-code-modal', ['record' => $record]);
+                    })
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn($action) => $action->label('Tutup')),
             ])
             ->defaultSort('tanggal_rapat', 'desc');
     }
