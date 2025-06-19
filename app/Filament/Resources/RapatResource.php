@@ -182,14 +182,6 @@ class RapatResource extends Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make()
-                    ->modalHeading('Edit Rapat')
-                    ->modalSubmitActionLabel('Simpan Perubahan'),
-                Tables\Actions\DeleteAction::make(),
-                Tables\Actions\Action::make('lihatKehadiran')
-                    ->label('Lihat Kehadiran')
-                    ->icon('heroicon-o-eye')
-                    ->url(fn($record) => RapatResource::getUrl('viewKehadiran', ['record' => $record])),
                 Tables\Actions\Action::make('generateQrCode')
                     ->label('QR Code')
                     ->icon('heroicon-o-qr-code')
@@ -199,6 +191,15 @@ class RapatResource extends Resource
                     })
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn($action) => $action->label('Tutup')),
+                Tables\Actions\EditAction::make()
+                    ->modalHeading('Edit Rapat')
+                    ->modalSubmitActionLabel('Simpan Perubahan'),
+                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\Action::make('lihatKehadiran')
+                    ->label('Lihat Kehadiran')
+                    ->icon('heroicon-o-eye')
+                    ->url(fn($record) => RapatResource::getUrl('viewKehadiran', ['record' => $record])),
+                
             ])
             ->defaultSort('tanggal_rapat', 'desc');
     }
