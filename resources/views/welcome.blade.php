@@ -488,9 +488,9 @@
                                     <svg xmlns="http://www.w3.org/2000/svg" class="info-icon" fill="none" viewBox="0 0 24 24"
                                         stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                                            clip-rule="evenodd" />
+                                            d="M12 6v6l4 2m6-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                     </svg>
+
                                     <span class="font-medium">
                                         {{ \Carbon\Carbon::parse($rapat->waktu_mulai)->format('H:i') }} -
                                         {{ $rapat->waktu_selesai ? \Carbon\Carbon::parse($rapat->waktu_selesai)->format('H:i') : 'Selesai' }}
@@ -622,7 +622,8 @@
                         telah disediakan.</li>
                     <li class="pl-2 border-l-4 border-indigo-200 py-1">Pastikan semua data sudah benar, lalu klik tombol
                         <strong class="text-green-600 font-semibold px-2 py-0.5 bg-green-50 rounded-md">"Submit"</strong>
-                        untuk merekam kehadiran Anda.</li>
+                        untuk merekam kehadiran Anda.
+                    </li>
                 </ol>
             </div>
         @else
